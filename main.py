@@ -150,13 +150,30 @@ draw_grid()
 root.mainloop()
 
 
-def evaluation(board):
-    # evaluation function: -1000 if the player won, +1000 if thee AI won
-    if check_winner(board, 1):
+def check_win(board):
+    for i in range(3):
+        print(board[i],"\n")
+    print("\n")
+    # Check row
+    for row in range(3):
+        if board[row][0]==board[row][1]==board[row][2]=="X":
+            return 1000
+        elif board[row][0]==board[row][1]==board[row][2]=="O":
+            return -1000
+    # Check columns
+    for columns in range(3):
+        if board[0][columns]==board[1][columns]==board[2][columns]=="X":
+            return 1000
+        elif board[0][columns]==board[1][columns]==board[2][columns]=="O":
+            return -1000
+            
+    # Check diagonals
+    if (board[0][0]==board[1][1]==board[2][2]=="X") or (board[0][2]==board[1][1]==board[2][0]=="X"):
         return 1000
-    is check_winner(board, -1):
+    elif (board[0][0]==board[1][1]==board[2][2]=="O") or (board[0][2]==board[1][1]==board[2][0]=="O"):
         return -1000
-    return 0
+    else:
+        return 0
 
 def square_available(board):
     #returns a list of the empty squares
@@ -177,7 +194,7 @@ def minimax(board, level, is_max, level_max=None):
     returns: the score of the best combijation found
     """
     #basic case: end of the game or maximal level reached
-    score = evaluation(board)
+    score = check_win(board)
     if score != 0: # someone won
         return score 
     if is_full(board): # tie
@@ -225,4 +242,5 @@ def best_play(board, level_max=None):
             best_index = square
 
     return best_index, best_score
+
 
