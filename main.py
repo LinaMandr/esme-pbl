@@ -149,14 +149,30 @@ difficulty_menu.grid(row=6, column=0, columnspan=3)
 draw_grid()
 root.mainloop()
 
-
-def evaluation(board):
-    # evaluation function: -1000 if the player won, +1000 if thee AI won
-    if check_winner(board, 1):
+def check_win(morpion):
+    for i in range(3):
+        print(morpion[i],"\n")
+    print("\n")
+    # Check row
+    for row in range(3):
+        if morpion[row][0]==morpion[row][1]==morpion[row][2]=="X":
+            return 1000
+        elif morpion[row][0]==morpion[row][1]==morpion[row][2]=="O":
+            return -1000
+    # Check columns
+    for columns in range(3):
+        if morpion[0][columns]==morpion[1][columns]==morpion[2][columns]=="X":
+            return 1000
+        elif morpion[0][columns]==morpion[1][columns]==morpion[2][columns]=="O":
+            return -1000
+            
+    # Check diagonals
+    if (morpion[0][0]==morpion[1][1]==morpion[2][2]=="X") or (morpion[0][2]==morpion[1][1]==morpion[2][0]=="X"):
         return 1000
-    is check_winner(board, -1):
+    elif (morpion[0][0]==morpion[1][1]==morpion[2][2]=="O") or (morpion[0][2]==morpion[1][1]==morpion[2][0]=="O"):
         return -1000
-    return 0
+    else:
+        return 0
 
 def square_available(board):
     #returns a list of the empty squares
@@ -177,7 +193,7 @@ def minimax(board, level, is_max, level_max=None):
     returns: the score of the best combijation found
     """
     #basic case: end of the game or maximal level reached
-    score = evaluation(board)
+    score = check_win(board)
     if score != 0: # someone won
         return score 
     if is_full(board): # tie
@@ -225,4 +241,5 @@ def best_play(board, level_max=None):
             best_index = square
 
     return best_index, best_score
+
 
